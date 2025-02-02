@@ -1,6 +1,6 @@
 import { observerMixin } from "./mixin.js";
 
-class TodoItem {
+export class TodoItem {
   constructor(text) {
     this.text = text;
   }
@@ -10,7 +10,7 @@ class TodoItem {
   }
 }
 
-class TodoList {  //candidate for singleton
+export class TodoList {  //candidate for singleton
   #data = new Set()
   get items() { return this.#data; }
   
@@ -36,6 +36,7 @@ class TodoList {  //candidate for singleton
     const todoExists = array.filter(t => t.equals(item)).length > 0;
     if (!todoExists) {
       this.#data.add(item);
+       this.notify();
     }
   }
 
@@ -43,6 +44,7 @@ class TodoList {  //candidate for singleton
     const array = Array.from(this.#data);
     const todoDelete = array.filter(t => t.text === todo_text)[0];
     this.#data.delete(todoDelete);
+     this.notify();
   }
 
   find(todo_text) {
@@ -51,7 +53,8 @@ class TodoList {  //candidate for singleton
   }
 
   replaceList (list) {
-     this.#data = list
+    this.#data = list;
+    this.notify();
   }
 
 }
